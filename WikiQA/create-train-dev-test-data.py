@@ -1,5 +1,6 @@
 import os
 import glob
+from shutil import copyfile
 from nltk.tokenize import TreebankWordTokenizer
 
 def build_vocab(filepaths, dst_path, lowercase=True):
@@ -55,7 +56,7 @@ def write_out(infile, out_folder):
             if qid != qid_old:
                 qid_old = qid
                 qid_count += 1
-                if "1" in qid_labels:
+                if "1" in qid_labels: # and "0" in qid_labels:
                     qids.extend(qid_qids)
                     questions.extend(qid_questions)
                     answers.extend(qid_answers)
@@ -74,6 +75,18 @@ def write_out(infile, out_folder):
     dump(labels, os.path.join(out_folder, 'sim.txt'))
     dump(qids, os.path.join(out_folder, 'id.txt'))
 
+    if out_folder == 'train':
+        with open(os.path.join('WikiQACorpus', 'WikiQA-{}.ref'.format(out_folder))) as inqrel:
+            with open('{}.qrel'.format(out_folder), 'w') as outqrel:
+                outqids = set(qids)
+                for line in inqrel:
+                    qid, zero, docid, label = line.strip().split()
+                    if qid in outqids:
+                        print(line.strip(), file=outqrel)
+    else:
+        copyfile(os.path.join('WikiQACorpus', 'WikiQA-{}-filtered.ref'.format(out_folder)), 
+                 '{}.qrel'.format(out_folder))
+
 
 
 if __name__ == "__main__":
@@ -85,3 +98,4 @@ if __name__ == "__main__":
     build_vocab(
         glob.glob(os.path.join('.', '*/*.toks')),
         os.path.join('.', 'vocab.txt'), False)
+
