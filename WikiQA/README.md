@@ -6,6 +6,9 @@ WikiQA
 1. Yang, Yi, Wen-tau Yih, and Christopher Meek. "WikiQA: A Challenge Dataset for Open-Domain Question Answering." EMNLP. 2015.
 2. https://www.microsoft.com/en-us/research/publication/wikiqa-a-challenge-dataset-for-open-domain-question-answering/
 
+Note that the data is processed as follows:
+1. questions with no candidate answers are excluded
+2. answer sentences are truncated to 40 tokens
 
 ### Getting the data
 You can download the dataset from [here](https://www.microsoft.com/en-us/download/confirmation.aspx?id=52419) or [here](http://aka.ms/WikiQA)
@@ -44,3 +47,5 @@ Each line in ``sim.txt`` contains the label (0 or 1) for the question-answer pai
 
 Each line in ``id.txt`` contains the question-id for question at the corresponding line in ``a.toks``
 
+
+Get the qrels to the root folder
